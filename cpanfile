@@ -7,3 +7,4 @@ requires 'HTML::TreeBuilder';
 requires 'JSON::PP';
 requires 'Text::Markdown::Discount';
 requires 'Web::Query';
+requires 'YMAL';

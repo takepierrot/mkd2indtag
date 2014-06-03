@@ -277,7 +277,7 @@ sub main {
 sub output_file {
     my ($path, $parsed_strings) = @_;
 
-    my $outPath = decode('locale_fs', $path); # $path はバイナリデータなので文字列にdecode
+    my $outPath = decode(locale_fs => $path); # $path はバイナリデータなので文字列にdecode
     $outPath =~ s|(?=\.[^\.]+$)|_IndTag|;     # で、ファイル名を書き換え。
     # タグ付きテキストはshift-jisでないと上手く動かないらしいので。
     open my $out, '>', $outPath;

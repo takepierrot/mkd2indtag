@@ -1,0 +1,9 @@
+requires 'Class::Accessor::Fast';
+requires 'Encode::Locale';
+requires 'Encode::UTF8Mac';
+requires 'Encode';
+requires 'HTML::Entities';
+requires 'HTML::TreeBuilder';
+requires 'JSON::PP';
+requires 'Text::Markdown::Discount';
+requires 'Web::Query';

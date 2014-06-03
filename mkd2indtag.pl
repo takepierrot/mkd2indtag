@@ -217,8 +217,7 @@ if ($^O eq 'darwin') {
 use Web::Query;
 use Text::Markdown::Discount qw/markdown/;
 use HTML::TreeBuilder;
-use YAML::Syck;
-$YAML::Syck::ImplicitUnicode = 1;
+use YAML;
 
 
 my $tagreplace = TagReplace->new;

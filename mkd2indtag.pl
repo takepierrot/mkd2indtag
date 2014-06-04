@@ -53,12 +53,7 @@ sub moji_style_marge {
 
 sub header {
     my $self = shift @_;
-    if ($^O eq 'darwin') {
-        return '<SJIS-MAC>';
-    }
-    else {
-        return '<SJIS-WIN>';
-    }
+    return $^O eq 'darwin' ? '<SJIS-MAC>' : '<SJIS-WIN>';
 }
 
 # 以下はHTML要素を分解してテキスト化する関数

@@ -8,11 +8,9 @@ use autodie;
 use FindBin;
 use lib $FindBin::Bin . '/lib';
 
-use Encode;
-use Encode::Locale;
-use Web::Query;
-use Text::Markdown::Discount qw/markdown/;
-use HTML::Entities;
+use Web::Query q/wq/;
+use Text::Markdown::Discount q/markdown/;
+use HTML::Entities q/decode_entities/;
 
 use Class::Accessor::Fast q/antlers/;
 
@@ -201,7 +199,7 @@ use warnings;
 use utf8;
 use autodie;
 
-use Encode;
+use Encode qw/encode decode/;
 use Encode::Locale;
 use Encode::UTF8Mac;
 
@@ -214,10 +212,10 @@ if ($^O eq 'darwin') {
 }
 
 
-use Web::Query;
+use Web::Query qw/wq/;
 use Text::Markdown::Discount qw/markdown/;
 use HTML::TreeBuilder;
-use YAML;
+use YAML qw/Load/;
 
 
 my $tagreplace = TagReplace->new;

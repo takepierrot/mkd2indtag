@@ -259,7 +259,7 @@ sub main {
         # $key はタグの名前。なんで $key という名前をつけてしまったのか...
         my ($key) = $webQuery->as_html =~ m/^<(.+?)[\s>]/;
         # $key で TagReplace のメソッドを動的に呼び出し
-        $parsed_strings .=  $tagreplace->$key($webQuery, $key) . "\n";
+        $parsed_strings .= $tagreplace->$key($webQuery, $key) . "\n";
     });
 
     # ファイルに書き込む

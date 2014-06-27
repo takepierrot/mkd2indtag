@@ -7,4 +7,5 @@ requires 'HTML::TreeBuilder';
 requires 'JSON::PP';
 requires 'Text::Markdown::Discount';
 requires 'Web::Query';
-requires 'YMAL';
+requires 'YAML';
+# requires 'https://github.com/hatyuki/p5-Text-Markdown-GFM-Lite/tarball/master';

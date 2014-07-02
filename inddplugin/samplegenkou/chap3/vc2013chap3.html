@@ -1,0 +1,197 @@
+<!DOCTYPE  html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>doc</title>
+	<script src="../cssjs/jquery-2.0.3.min.js"></script>
+	<script src="../cssjs/addimagename.js"></script>
+	<link rel="stylesheet" href="../cssjs/myrule.css"> 
+  </head>
+  <body>  
+    <p><script src="../cssjs/jquery-2.0.3.min.js"></script></p>
+<p><script src="../cssjs/addimagename.js"></script></p>
+<link rel="stylesheet" href="../cssjs/myrule.css"> 
+
+
+<h1 id="3-1-dx-">3-1　DXライブラリを使ってみよう</h1>
+<p>（リード）
+DXライブラリはC言語でゲームを簡単に作れるようにするライブラリです。まずはDXライブラリを使ったプログラムを書くための準備を行い、簡単なテストプログラムを書いてみましょう。</p>
+<h2 id="dx-">DXライブラリを使う準備をしよう</h2>
+<p>ゲームのプログラムを作るためには、Windowsが持つ3つの機能を使わなければいけません。1つめはキャラクターなどの絵を画面に描画する<strong>グラフィックスの機能</strong>。2つめはキーボードやマウス、ジョイパッドなどから<strong>ユーザーの操作を受け取る機能</strong>。3つめは効果音などを再生する<strong>サウンド再生機能</strong>です。この内、一番ややこしくて勉強が必要となるのは、1つめのグラフィックス機能です。</p>
+<p>Windowsにはグラフィックスを担当する機能がいくつかあり、その中でゲームのために用意されているものが<strong>DirectX【ダイレクトエックス】</strong>です。DirectXはとても強力なのですが、使いこなすためにはWindowsプログラムや3Dグラフィックスのための数学について勉強しなければいけません。ここでDXライブラリを使うと、DirectXの難しい部分を隠し、わかりやすい関数を使ってゲームプログラムを書くことができます。</p>
+<p><img src="img/c03-01-06.png?zoom=80&amp;clip=0+0+600+300" alt="キャプションなし"></p>
+<div class="zuchuu">〈新しいプロジェクト〉をクリック</div>
+
+
+<h2 id="-">テストプログラムを書いてみよう</h2>
+<p>準備も終わったので、まずは最初のプログラムを書いてみましょう。追加済みのmain.cppに次のプログラムを入力してください。</p>
+<p><span class="hen">編：丸数字のところは図中文字で</span></p>
+<h5 id="main-cpp-1-">main.cpp　（コード1）</h5>
+<pre><code><span class="preprocessor">#include &lt;DxLib.h&gt;　❶DxLib.hのインクルード</span>
+
+<span class="keyword">int</span> WINAPI WinMain(HINSTANCE h1, HINSTANCE hP, LPSTR lpC, <span class="keyword">int</span> nC){　❷アプリケーションの開始
+    <span class="comment">//ウィンドウモードにする</span>
+    ChangeWindowMode(<span class="literal">TRUE</span>);    ❸ウィンドウモード切替
+    <span class="comment">//DXライブラリ初期化</span>
+    <span class="keyword">if</span> (DxLib_Init() == -<span class="number">1</span>) <span class="keyword">return</span> -<span class="number">1</span>;    ❹DXライブラリの初期化
+    <span class="comment">//ボックスを描画</span>
+    DrawBox(<span class="number">0</span>, <span class="number">0</span>, <span class="number">120</span>, <span class="number">120</span>, <span class="number">0x00FFFF</span>, <span class="literal">TRUE</span>);    ❺四角形の描画
+    <span class="comment">//待機</span>
+    WaitKey();    ❻キー入力待ち
+    <span class="comment">//DXライブラリの終了処理</span>
+    DxLib_End();    ❼DXライブラリの終了
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<p>ツールバーの〈ローカルWindowsデバッガー〉をクリックするか<del>［F5］</del>キーを押してプログラムを実行すると、次のような画面が表示されるはずです。コンソールアプリケーションでは「デバッグなしで実行」でしたが、ここからはウィンドウアプリケーションなのでデバッグつきで実行します。</p>
+<table>
+<thead>
+<tr>
+<th>新たに登場した関数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SetDrawScreen【セットドロースクリーン】関数</strong><br>機能：描画の対象となる画面を指定する。定数DX_SCREEN_FRONTを指定した場合はオモテ画面（初期設定）、DX_SCREEN_BACKを指定した場合はウラ画面となる。<br>文法：<code>int SetDrawScreen( int DrawScreen )</code></td>
+</tr>
+<tr>
+<td><strong>ClearDrawScrenn【クリアドロースクリーン】</strong><br>機能：画面を消去する。<br>文法：int ClearDrawScreen(void)</td>
+</tr>
+<tr>
+<td><strong>ScreenFlip【スクリーンフリップ】関数</strong><br>機能：オモテ画面とウラ画面を入れ替える。<br>文法：int ScreenFlip(void)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="-processmessage-">無限ループとProcessMessage関数</h2>
+<p>ゲームはクリアかゲームオーバーになるまで続くわけですから、for文よりもwhile文を使ったループのほうが適しています。次のソースコードは、while文を使って［Esc］キーが押されるまでの間、無限にループするようにしたものです。実行結果はfor文のときと同じですが、この後のゲームプログラムでも使う基本構造となります。</p>
+<h5 id="main-cpp-7">main.cpp　コード7</h5>
+<pre><code><span class="preprocessor">#include &lt;DxLib.h&gt;</span>
+
+<span class="keyword">int</span> WINAPI WinMain(HINSTANCE h1, HINSTANCE hP, LPSTR lpC, <span class="keyword">int</span> nC){
+    <span class="comment">//ウィンドウモードにする</span>
+    ChangeWindowMode(<span class="literal">TRUE</span>);
+    <span class="comment">//DXライブラリ初期化</span>
+    <span class="keyword">if</span> (DxLib_Init() == -<span class="number">1</span>) <span class="keyword">return</span> -<span class="number">1</span>;
+
+    <span class="comment">//画像を読み込み</span>
+    <span class="keyword">int</span> ghandle = LoadGraph(<span class="string">"media¥¥smp1_chara01.png"</span>);
+    <span class="keyword">int</span> x = <span class="number">0</span>;
+
+    SetDrawScreen(DX_SCREEN_BACK);
+    <span class="keyword">while</span> (ProcessMessage() == <span class="number">0</span> &amp;&amp; CheckHitKey(KEY_INPUT_ESCAPE) == <span class="number">0</span>){
+        ClearDrawScreen();
+        <span class="keyword">if</span> (x &lt;= <span class="number">320</span>) x += <span class="number">2</span>;
+        DrawGraph(x, <span class="number">224</span>, ghandle, <span class="literal">TRUE</span>);
+        ScreenFlip();
+    }
+
+    <span class="comment">//待機</span>
+    WaitKey();
+    <span class="comment">//DXライブラリの終了処理</span>
+    DxLib_End();
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<p><img src="img/c03-03-10.png" alt="［Esc］キーを押すと終了する"></p>
+<p>また、whileループの終了条件として、<strong>CheckHitKey【チェックヒットキー】関数</strong>によって<del>［Esc］</del>キーの状態を監視させています。この関数は指定したキーが押されていたら1を、押されていなければ0を返します。</p>
+<p>監視するキーの種類は、右ページの表の<strong>定数【ていすう】</strong>によって指定します。</p>
+<p>定数というのは変更できない変数のことです。<strong>#define【シャープデファイン】プリプロセッサ</strong>か、<strong>const【コンスト】キーワード</strong>を使って宣言します。constキーワードはC++の文法ですが、型チェックもできて便利です。</p>
+<pre><code class="lang-t"><span class="preprocessor">#<span class="keyword">define</span> PIE 3.1415926//コンパイル時にPIEという字は3.1415926に置換される</span>
+<span class="keyword">const</span> <span class="keyword">float</span> MAXENEMY = <span class="number">10</span>;<span class="comment">//constキーワード付きの変数は内容を変更できない</span></code></pre>
+<table>
+<thead>
+<tr>
+<th>見出しなし</th>
+<th>見出しなし</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KEY_INPUT_BACK</td>
+<td><del>［BackSpace］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_TAB</td>
+<td><del>［Tab］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_RETURN</td>
+<td><del>［Enter］</del>キー</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>KEY_INPUT_LSHIFT</td>
+<td>左<del>［Shift］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_RSHIFT</td>
+<td>右<del>［Shift］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_LCONTROL</td>
+<td>左<del>［Ctrl］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_RCONTROL</td>
+<td>右<del>［Ctrl］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_ESCAPE</td>
+<td><del>［Escape］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_SPACE</td>
+<td><del>［Space］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_PGUP</td>
+<td><del>［PageUp］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_PGDN</td>
+<td><del>［PageDown］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_END</td>
+<td><del>［End］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_HOME</td>
+<td><del>［Home］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_LEFT</td>
+<td><del>［←］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_UP</td>
+<td><del>［↑］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_RIGHT</td>
+<td><del>［→］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_DOWN</td>
+<td><del>［↓］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_INSERT</td>
+<td><del>［Ins］</del>キー</td>
+</tr>
+<tr>
+<td>KEY_INPUT_DELETE</td>
+<td><del>［Del］</del>キー</td>
+</tr>
+</tbody>
+</table>
+<h5 id="-">コラム：ヌルポインタと文字列の扱い</h5>
+<p>CreateFontToHandle関数では、「フォント名かNULLのどちらか」を指定します。<strong>NULL【ヌル】</strong>というのは0を表す定数で、ポインタに代入するためのものです。メモリアドレスの0番地は使用しないことに決まっているので、NULLは<strong>データがない</strong>ことを意味します。</p>
+<p>ところでなぜフォント名の文字列の代わりにNULLを指定できるのかというと、C言語では文字列をchar型配列変数（P.■■参照）の先頭位置を表すポインタとして扱うからです。ここにNULLを指定した場合、CreateFontToHandle関数は「フォントの指定は特にない」と判断し、デフォルトのフォントを使います。　</p>
+<hr>
+<script src='http://localhost:35732/livereload.js'></script>
+
+  </body>
+</html>

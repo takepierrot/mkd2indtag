@@ -67,7 +67,9 @@ $ ./cpanm -L . --installdeps .
 解凍したフォルダを環境変数「PATH」に追加しておくと便利です。
 シェルがbashなら、おそらく下記のコマンドを実行すれば大丈夫（たぶん。。
 
+```sh
 $ echo "export PATH = $PATH:~/Desktop/mkd2indtag" >> ~/.bash_profile
+```
 
 あとはターミナルを再起動するだけ！ これで準備は完了です。
 

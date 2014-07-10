@@ -11,8 +11,10 @@ package FileSyori {
     use List::AllUtils qw/uniq/;
     use Encode qw/encode decode/;
 
+    use FindBin;
+    use lib $FindBin::Bin;
     use TagReplace;
-    my $tagreplace = TagReplace->new;
+    my $tagreplace = new TagReplace;
 
     sub new {
         my $class = shift;
@@ -22,28 +24,39 @@ package FileSyori {
     }
 
 
+    sub new_style_yaml {
+        my $self = shift @_;
+        return "$FindBin::Bin/new_style.yaml";
+    }
+
+
     sub process_file_henkan {
         my ($self, $path, $ishtml) = @_;
-        my $wq = _yomikomi($path, $ishtml);
+        my $wq = $self->yomikomi($path, $ishtml);
         my $parsed_strings = _create_parsed_strings($wq);
 
         # ファイルに書き込む
         _output_file($path, $parsed_strings);
     }
 
+    sub open_new_style {
+        my $self = shift @_;
+        open my $in_newstyles, '<:utf8', $self->new_style_yaml;
+        my $new_styles = Load(do {local $/; <$in_newstyles>});
+        return $new_styles;
+    }
 
     sub marge_style {
         # 設定ファイル「new_style.yaml」の定義スタイルとのマージ
         my $self = shift @_;
-        open my $in_newstyles, '<:utf8', $FindBin::Bin . '/new_style.yaml';
-        my $new_styles = Load(do {local $/; <$in_newstyles>});
+        my $new_styles = $self->open_new_style;
         $tagreplace->danraku_style_marge($new_styles->{danraku});
         $tagreplace->moji_style_marge($new_styles->{moji});
     }
 
 
-    sub _yomikomi {
-        my ($path, $is_html) = @_;
+    sub yomikomi {
+        my ($self, $path, $is_html) = @_;
         # 変換するファイルを読み込む
         open my $in, '<:utf8', $path;
         my $markdown = do { local $/; <$in> };

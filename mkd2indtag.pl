@@ -46,19 +46,22 @@ sub main {
 
     # 解析した以外の引数が必要ならここでチェック
     pod2usage("Pleas set \@ARGV\n") unless @ARGV;
+    # 必須オプションのチェック
+    my @no_double = grep {exists $opt->{$_}} qw/win mac/;
+    pod2usage(qq/オプション "@no_double" は同時に設定できません\n/) if scalar @no_double == 2;
 
     my $file_serve = FileSyori->new;
 
     # スウォッチファイルの作成
     my $swatch = Swatch->new;
     if ($opt->{swatch}) {
-        $swatch->create_swatch_profile($_, $opt->{ishtml}) for @ARGV;
+        for my $path (@ARGV) {
+            my $wq = $file_serve->yomikomi($path, $opt->{ishtml});
+            $swatch->create_swatch_profile($wq);
+        }
         exit;
     }
 
-    # 必須オプションのチェック
-    my @no_double = grep {exists $opt->{$_}} qw/win mac/;
-    pod2usage(qq/オプション "@no_double" は同時に設定できません\n/) if scalar @no_double == 2;
 
     # 設定ファイル「new_style.yaml」の定義スタイルとのマージ
     $file_serve->marge_style();
@@ -143,7 +146,7 @@ script_name - mkd2indtag.pl
     6-2. InDesignたぐい外で使われている「<>」を「\」でエスケープ
  7. spanタグの該当部分に定義済みのスウォッチを割り当てる
 
- 
+
 =head2 スウォッチの定義は下記のとおり
 
  <ColorTable:=<RTF r163 g21 b21:COLOR:CMYK:Process:0.42089998722076416,1,1,0.09129999577999115><chap02:COLOR:CMYK:Process:0,0.8999999761581421,0.5,0><表組01:COLOR:CMYK:Process:0,0,0.1,0><表組02:COLOR:CMYK:Process:0,0,0,0.1><Paper:COLOR:CMYK:Process:0,0,0,0>>

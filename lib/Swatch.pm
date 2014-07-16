@@ -40,10 +40,10 @@ sub create_swatch_profile {
     }
     my %new_swatch = map {$_ => $swatch_list->{$_}} @undef_swatch;
     my %kakikomi = (%$defined_swatch, %new_swatch);
-    $self->write_swatch(\%kakikomi);
+    $self->write_swatch_to_yaml(\%kakikomi);
 }
 
-sub write_swatch {
+sub write_swatch_to_yaml {
     my ($self, $kakikomi) = @_;
     my $style = $self->style;
     $style->{defined_swatch} = $kakikomi;

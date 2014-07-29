@@ -52,8 +52,19 @@ sub write_swatch_to_yaml {
     print $out $yaml;
 }
 
-sub import_swatch {
-
+sub write_swatch_to_profile {
+    my $self = shift @_;
+    my $defined_swatch = $self->get_defined_swatch;
+    my @list = ();
+    for my $name (keys %$defined_swatch) {
+        my $elem = $defined_swatch->{$name};
+        my $swatch = sprintf '<%s:COLOR:CMYK:Process:%s,%s,%s,%s>',
+                $name, $elem->{C}, $elem->{M}, $elem->{Y}, $elem->{K};
+        push @list => $swatch;
+    }
+    my $swatch_profile = '<ctable:=' . join('' => @list)   . '>';
+    open my $out, '>:utf8', "$FindBin::Bin/new_swatch_profile.txt";
+    print $out $swatch_profile;
 }
 
 sub get_swatch_list {

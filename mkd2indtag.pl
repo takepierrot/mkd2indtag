@@ -1,11 +1,12 @@
 #!/usr/bin/env perl
-use v5.14;
+use v5.16;
 use warnings;
 use utf8;
 use autodie;
 
 use FindBin;
 use lib $FindBin::Bin . '/lib';
+use lib $FindBin::Bin . '/lib/perl5';
 
 use Encode qw/encode decode/;
 use Encode::Locale;

@@ -8,4 +8,6 @@ requires 'JSON::PP';
 requires 'Text::Markdown::Discount';
 requires 'Web::Query';
 requires 'YAML';
+requires 'List::AllUtils';
+requires 'DDP';
 # requires 'https://github.com/hatyuki/p5-Text-Markdown-GFM-Lite/tarball/master';

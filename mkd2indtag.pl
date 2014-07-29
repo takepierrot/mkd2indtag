@@ -59,6 +59,7 @@ sub main {
         for my $path (@ARGV) {
             my $wq = $file_serve->yomikomi($path, $opt->{ishtml});
             $swatch->create_swatch_profile($wq);
+            $swatch->write_swatch_to_profile;
         }
         exit;
     }

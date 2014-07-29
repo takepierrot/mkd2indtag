@@ -50,8 +50,8 @@ package FileSyori {
         # 設定ファイル「new_style.yaml」の定義スタイルとのマージ
         my $self = shift @_;
         my $new_styles = $self->open_new_style;
-        $tagreplace->danraku_style_marge($new_styles->{danraku});
-        $tagreplace->moji_style_marge($new_styles->{moji});
+        $tagreplace->danraku_style_marge($new_styles->{paraStyle});
+        $tagreplace->moji_style_marge($new_styles->{charaStyle});
     }
 
 

@@ -6,7 +6,7 @@ package TagReplace {
     use autodie;
 
     use Web::Query q/wq/;
-    use Text::Markdown::Discount q/markdown/;
+    use Text::Markdown::Discount qw/markdown/;
     use HTML::Entities qw/decode_entities encode_entities/;
 
     sub new {

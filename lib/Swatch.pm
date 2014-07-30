@@ -7,7 +7,7 @@ use autodie;
 use Carp qw/confess croak/; # confessはスタックトレース付き
 use List::AllUtils qw/uniq/;
 use FindBin;
-use lib "$FindBin::Bin";
+use lib $FindBin::Bin;
 use FileSyori;
 use YAML;
 use DDP;
@@ -33,7 +33,7 @@ sub create_swatch_profile {
     # 定義済みのスウォッチの読み込み
     my $defined_swatch = $self->get_defined_swatch;
     my @undef_swatch = ();      # 未定義のスウォッチ
-    my $swatch_list = $self->get_swatch_list;
+    my $swatch_list = $self->get_swatch_list; # スウォッチの定義リスト
     for my $elem (@uniq_classes) {
         # 未定義のスウォッチの抽出
         push @undef_swatch => $elem unless grep {$_ eq $elem} keys %$defined_swatch;

@@ -5,8 +5,8 @@ use utf8;
 use autodie;
 
 use FindBin;
-use lib $FindBin::Bin . '/lib';
-use lib $FindBin::Bin . '/lib/perl5';
+use lib "$FindBin::Bin/lib";
+use lib "$FindBin::Bin/lib/perl5";
 
 use Encode qw/encode decode/;
 use Encode::Locale;
@@ -100,7 +100,9 @@ script_name - mkd2indtag.pl
      -i, --ishtml   ファイルを強制的にHTMLファイルとして読み込む場合に指定。
                     拡張子が「.html」「.htm」の場合は指定しなくても勝手にHTML
                     ファイルとして読み込みます。
-     -s, --swatch   ファイルを読み込んで必要なスウォッチを設定ファイルに定義します。
+     -s, --swatch   ファイルを読み込んで、コードのシンタックスハイライトに必要
+                    なスウォッチの定義ファイルを出力します。
+                    定義ファイルの名称は「new_swatch_profile.txt」です。
      -h, --help     ヘルプを全文表示します。初期設定の方法とかも見れます
 
 =head1 DESCRIPTION

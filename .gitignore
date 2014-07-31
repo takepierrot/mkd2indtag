@@ -15,3 +15,5 @@ lib
 
 bin
 new_swatch_profile.txt
+cpanfile.snapshot
+local

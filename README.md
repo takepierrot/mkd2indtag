@@ -1,7 +1,7 @@
 mkd2indtag
 ==========
 
-MarkdownをInDesignタグ付きテキストに変換
+MarkdownをInDesignタグ付きテキストに変換するPerlスクリプト
 
 ##  SYNOPSIS
 
